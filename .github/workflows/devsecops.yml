@@ -90,10 +90,33 @@ jobs:
           path: devsecops-image.tar
           retention-days: 1
 
+  container-scan:
+    name: Container Scan - Trivy
+    runs-on: ubuntu-latest
+    needs: docker-build
+
+    steps:
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image-${{ github.sha }}
+          path: .
+
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          input: devsecops-image.tar
+          scan-type: image
+          format: table
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+          ignore-unfixed: false
+          exit-code: '1'
+
   baseline:
     name: Baseline CI Check
     runs-on: ubuntu-latest
-    needs: docker-build
+    needs: container-scan
 
     steps:
       - name: Checkout repository
