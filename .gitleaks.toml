@@ -1,0 +1,11 @@
+title = "DevSecOps Shift Left Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "devsecops-demo-secret"
+description = "Detect demonstration secret used in DevSecOps project"
+regex = '''DEVSECOPS_TEST_SECRET\s*=\s*([A-Za-z0-9_-]{16,})'''
+secretGroup = 1
+keywords = ["DEVSECOPS_TEST_SECRET"]
