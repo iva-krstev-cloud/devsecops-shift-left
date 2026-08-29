@@ -32,10 +32,29 @@ jobs:
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
           GITLEAKS_ENABLE_SUMMARY: "true"
 
+  iac-scan:
+    name: IaC Scan - Checkov
+    runs-on: ubuntu-latest
+    needs: secret-scan
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Run Checkov Terraform scan
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/tf" \
+            bridgecrew/checkov:latest \
+            -d /tf/infrastructure \
+            --framework terraform \
+            --check CKV_AWS_24 \
+            --compact
+
   baseline:
     name: Baseline CI Check
     runs-on: ubuntu-latest
-    needs: secret-scan
+    needs: iac-scan
 
     steps:
       - name: Checkout repository
