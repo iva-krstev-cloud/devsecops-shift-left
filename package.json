@@ -1,0 +1,11 @@
+{
+  "name": "devsecops-shift-left",
+  "version": "1.0.0",
+  "description": "Simple Node.js application for DevSecOps Shift Left demonstration",
+  "main": "app/server.js",
+  "scripts": {
+    "start": "node app/server.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
