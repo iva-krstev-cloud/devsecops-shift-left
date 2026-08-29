@@ -1,0 +1,39 @@
+name: DevSecOps Shift Left Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    name: Baseline CI Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Display workflow information
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Commit: ${{ github.sha }}"
+
+      - name: Verify project structure
+        run: |
+          test -f package.json
+          test -f app/server.js
+          test -f Dockerfile
+          test -f infrastructure/main.tf
+          echo "Baseline project structure is valid."
+
+      - name: Baseline pipeline completed
+        run: echo "Base GitHub Actions workflow completed successfully."
