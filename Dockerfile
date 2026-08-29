@@ -1,5 +1,8 @@
 FROM node:24-alpine
 
+RUN apk upgrade --no-cache && \
+    npm install -g npm@latest
+
 WORKDIR /app
 
 COPY --chown=node:node package.json ./
